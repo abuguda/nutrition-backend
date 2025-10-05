@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model School {
+  id          Int          @id @default(autoincrement())
+  name        String
+  address     String?
+  classes     Class[]
+  deliveries  Delivery[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Class {
+  id            Int            @id @default(autoincrement())
+  school        School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolId      Int
+  name          String
+  gradeLevel    String?
+  students      Student[]
+  distributions Distribution[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Student {
+  id          Int             @id @default(autoincrement())
+  class       Class           @relation(fields: [classId], references: [id], onDelete: Restrict)
+  classId     Int
+  name        String
+  gender      Gender?
+  birthDate   DateTime?
+  status      StudentStatus   @default(active)
+  attendance  Attendance[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model Attendance {
+  id          Int               @id @default(autoincrement())
+  student     Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId   Int
+  date        DateTime
+  status      AttendanceStatus
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([studentId, date])
+}
+
+model Supplier {
+  id          Int          @id @default(autoincrement())
+  name        String
+  contactInfo String?
+  deliveries  Delivery[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Meal {
+  id           Int             @id @default(autoincrement())
+  name         String
+  description  String?
+  type         MealType        @default(MAIN) // MAIN = أساسية, ALTERNATIVE = بديل
+  parentMeal   Meal?           @relation("MealAlternatives", fields: [parentMealId], references: [id])
+  parentMealId Int?
+  alternatives Meal[]          @relation("MealAlternatives")
+  components   MealComponent[]
+  deliveries   Delivery[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+enum MealType {
+  MAIN
+  ALTERNATIVE
+}
+
+model MealComponent {
+  id             Int      @id @default(autoincrement())
+  meal           Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  mealId         Int
+  name           String
+  manufacturer   String?
+  batchNumber    String?
+  productionDate DateTime?
+  expiryDate     DateTime?
+  quantity       Int
+  unit           String   // باكو / جرام / مللي
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Delivery {
+  id          Int          @id @default(autoincrement())
+  supplier    Supplier     @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  supplierId  Int
+  meal        Meal         @relation(fields: [mealId], references: [id], onDelete: Restrict)
+  mealId      Int
+  school      School       @relation(fields: [schoolId], references: [id], onDelete: Restrict)
+  schoolId    Int
+  date        DateTime
+  cartons     Int          // عدد الكراتين المستلمة
+  packs       Int          // عدد الباكو (cartons * cartonSize)
+  distributions Distribution[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Distribution {
+  id              Int       @id @default(autoincrement())
+  delivery        Delivery  @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+  deliveryId      Int
+  class           Class     @relation(fields: [classId], references: [id], onDelete: Restrict)
+  classId         Int
+  distributedPacks Int      // عدد الباكو الموزعة
+  date            DateTime
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([deliveryId, classId, date])
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  passwordHash String
+  role         UserRole
+  email        String?   @unique
+  associatedId Int?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+enum UserRole {
+  super_admin
+  school_admin
+  supervisor
+  supplier
+}
+
+enum AttendanceStatus {
+  present
+  absent
+}
+
+enum StudentStatus {
+  active
+  inactive
+  transferred
+}
+
+enum Gender {
+  male
+  female
+  other
+}

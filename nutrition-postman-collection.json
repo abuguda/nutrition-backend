@@ -1,0 +1,194 @@
+{
+"info": {
+"name": "NutritionApp API - Full",
+"_postman_id": "c1234567-abcd-4321-efgh-987654321000",
+"description": "Full collection for testing NutritionApp API with Auth, Schools, Classes, Students, Attendance, Suppliers, Meals, Meal Components, Deliveries, and Distributions.",
+"schema": "[https://schema.getpostman.com/json/collection/v2.1.0/collection.json](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)"
+},
+"item": [
+{
+"name": "Auth",
+"item": [
+{
+"name": "Login",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": {
+"mode": "raw",
+"raw": "{\n  \"username\": \"superadmin\",\n  \"password\": \"123456\"\n}"
+},
+"url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+}
+}
+]
+},
+{
+"name": "Schools",
+"item": [
+{
+"name": "Get All Schools",
+"request": {
+"method": "GET",
+"header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+"url": { "raw": "{{baseUrl}}/schools", "host": ["{{baseUrl}}"], "path": ["schools"] }
+}
+},
+{
+"name": "Create School",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"name\": \"مدرسة المستقبل\",\n  \"address\": \"الجيزة\"\n}" },
+"url": { "raw": "{{baseUrl}}/schools", "host": ["{{baseUrl}}"], "path": ["schools"] }
+}
+}
+]
+},
+{
+"name": "Classes",
+"item": [
+{
+"name": "Create Class",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"schoolId\": 1,\n  \"name\": \"الصف الأول\",\n  \"gradeLevel\": \"Grade 1\"\n}" },
+"url": { "raw": "{{baseUrl}}/classes", "host": ["{{baseUrl}}"], "path": ["classes"] }
+}
+}
+]
+},
+{
+"name": "Students",
+"item": [
+{
+"name": "Create Student",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"classId\": 1,\n  \"name\": \"أحمد محمد\",\n  \"gender\": \"male\",\n  \"birthDate\": \"2015-05-01\"\n}" },
+"url": { "raw": "{{baseUrl}}/students", "host": ["{{baseUrl}}"], "path": ["students"] }
+}
+}
+]
+},
+{
+"name": "Attendance",
+"item": [
+{
+"name": "Mark Attendance",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"studentId\": 1,\n  \"date\": \"2025-09-30\",\n  \"status\": \"present\"\n}" },
+"url": { "raw": "{{baseUrl}}/attendance", "host": ["{{baseUrl}}"], "path": ["attendance"] }
+}
+}
+]
+},
+{
+"name": "Suppliers",
+"item": [
+{
+"name": "Create Supplier",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"name\": \"شركة التغذية\",\n  \"contactInfo\": \"0123456789\"\n}" },
+"url": { "raw": "{{baseUrl}}/suppliers", "host": ["{{baseUrl}}"], "path": ["suppliers"] }
+}
+}
+]
+},
+{
+"name": "Meals",
+"item": [
+{
+"name": "Create Meal",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"name\": \"وجبة أساسية\",\n  \"description\": \"بسكويت بالتمر + بسكويت سادة\"\n}" },
+"url": { "raw": "{{baseUrl}}/meals", "host": ["{{baseUrl}}"], "path": ["meals"] }
+}
+}
+]
+},
+{
+"name": "Meal Components",
+"item": [
+{
+"name": "Create Meal Component",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"mealId\": 1,\n  \"componentName\": \"بسكويت بالتمر\",\n  \"quantity\": 80,\n  \"unit\": \"grams\"\n}" },
+"url": { "raw": "{{baseUrl}}/meal-components", "host": ["{{baseUrl}}"], "path": ["meal-components"] }
+}
+}
+]
+},
+{
+"name": "Deliveries",
+"item": [
+{
+"name": "Create Delivery",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"supplierId\": 1,\n  \"mealId\": 1,\n  \"schoolId\": 1,\n  \"date\": \"2025-09-30\",\n  \"quantity\": 10\n}" },
+"url": { "raw": "{{baseUrl}}/deliveries", "host": ["{{baseUrl}}"], "path": ["deliveries"] }
+}
+}
+]
+},
+{
+"name": "Distributions",
+"item": [
+{
+"name": "Create Distribution",
+"request": {
+"method": "POST",
+"header": [
+{ "key": "Authorization", "value": "Bearer {{token}}" },
+{ "key": "Content-Type", "value": "application/json" }
+],
+"body": { "mode": "raw", "raw": "{\n  \"deliveryId\": 1,\n  \"classId\": 1,\n  \"distributedQty\": 30,\n  \"date\": \"2025-09-30\"\n}" },
+"url": { "raw": "{{baseUrl}}/distributions", "host": ["{{baseUrl}}"], "path": ["distributions"] }
+}
+}
+]
+}
+],
+"variable": [
+{ "key": "baseUrl", "value": "http://localhost:4000/api" },
+{ "key": "token", "value": "" }
+]
+}
